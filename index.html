@@ -1,0 +1,383 @@
+<!-- HELLO
+-
+DevFolio is a minimal, clean, lightweight and fully responsive template for Devlopers!
+Created by Anil Seervi.
+-
+GitHub repo: https://github.com/AnilSeervi/DevFolio
+README: https://github.com/AnilSeervi/DevFolio/blob/master/README.md
+-
+Have fun creating your portfolio on this template!!! -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Title: add your Portfolio websites's title here -->
+    <title>Dark Devil | Developer</title>
+
+    <!-- Add some coding keywords below, Ex: (javascript, yourusername, etc) -->
+    <meta name="keywords" content="Dark Devil, Taha, skill" />
+
+    <!-- Improve your SEO by adding a small descrption of you -->
+    <meta name="description" content="Dark Devil | Developer" />
+
+    <!-- Add a your png Logo to the assets folder and change the href attr accordingly  -->
+    <link rel="icon" type="image/png" href="./assets/devfolio-logo.png" />
+
+    <!-- Add your primary-theme color for the value of content -->
+    <meta name="theme-color" content="#36d1dc" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <!-- Fill content with the URL of this portfolio you'll host -->
+    <meta property="og:url" content="https://darkdevil.is-a.dev/" />
+    <!-- Fill content with the title of your portfolio(Recommended to use what you put in <title> tag) -->
+    <meta property="og:title" content="Dark Devil | Developer" />
+    <!-- Give a short description that'll show up when you/someone shares your portfolio on different platform -->
+    <meta property="og:description" content="Dark Devil is a developer :D" />
+    <!-- Add a thumbnail image in assets folder and fill the content attr with URL to that thumbnail 
+      so that a thumbnail image of your portfolio is shown while shared on other platform -->
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <!-- Again fill content attr with the URL of this portfolio you'll host -->
+    <meta property="twitter:url" content="https://darkdevil.is-a.dev" />
+    <!-- Recommended to use the same text used within <title> element -->
+    <meta property="twitter:title" content="Dark Devil | Developer" />
+    <!-- short description that shows up while your portfolio is shared -->
+    <meta
+      property="twitter:description"
+      content="Dark Devil is a developer :D"
+    />
+    <!-- Fill content with the URL to the thumbnail image that you'll put in the assets folder -->
+   <!-- <meta
+      property="twitter:image"
+      content=""
+    /> -->
+
+    <!-- link tags -->
+    <link rel="stylesheet" href="./css/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="./javascript/scrollreveal.min.js"></script>
+    <script
+      defer
+      type="text/javascript"
+      src="./javascript/scrollveal.js"
+    ></script>
+
+    <script src="https://kit.fontawesome.com/e2a7339b4d.js" crossorigin="anonymous"></script>
+    <!-- Remove Google Analytics once you have your portfolio website set-up -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-122228201-4"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "UA-122228201-4");
+    </script>
+    <!-- End of Google Analytics -->
+  </head>
+  <body>
+    <!-- Hero Section -->
+    <div id="hero">
+      <section class="container">
+        <h1 class="hero-title">
+          Hi, my name is <span class="text-color-main name">Dark Devil</span>
+          <br />
+          I'm the FullStack Developer.
+        </h1>
+        <p class="hero-cta">
+          <a class="cta-btn cta-btn--hero" href="#about">Get in touch</a>
+        </p>
+      </section>
+      <a href="#about" class="scroll-down-link" aria-label="scroll-down">
+        <div class="scroll-down"></div
+      ></a>
+    </div>
+    <!-- /END Hero Section -->
+
+    <!-- About Section -->
+    <section id="about">
+      <div class="container">
+        <h2 class="section-title">About Me</h2>
+        <div class="row about-wrapper">
+          <div class="about-wrapper__image">
+            <img
+              class="img-fluid"
+              src="./assets/profile.png"
+              alt="Profile Image"
+            />
+          </div>
+          <div class="about-wrapper__info">
+            <p class="about-wrapper__info-text">
+              Hey There,My name is Taha, I am a Young backend developer From Pakistan 🇵🇰. I like coding. I uses Node.JS and i am learning Python nowadays. I can build discord bots and dynamic websites.
+            </p>
+            <p class="about-wrapper__info-text">
+              I also like playing mobile games. I play games like Brawl stars. I also run a team called LR Gaming
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /END About Section -->
+
+    <!--Projects Section-->
+    <section id="projects">
+      <div class="container">
+        <div class="project-wrapper">
+          <h2 class="section-title dark-blue-text">Projects</h2>
+
+          <!-- Each .row is a project -->
+          <article class="row">
+            <div class="project-wrapper__text">
+              <h3 class="project-wrapper__text-title">LR Gaming Website</h3>
+              <p class="project-wrapper__text-info">
+              This is a website for my own gaming team.The name of the team is LR Gaming. We are in Brawl stars and Free Fire. Join our discord server to be part of us. <a href="https://discord.gg/yKMH3AWT7h">This is the link</a>
+              </p>
+              <div class="project-wrapper__text-btns">
+                <a
+                  href="https://lrgaming.rocks/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="cta-btn cta-btn--hero cta-btn--projects"
+                  >See Live</a
+                >
+              </div>
+            </div>
+
+            <div class="project-wrapper__image">
+              <a href="https://lrgaming.rocks/" target="_blank" rel="noopener noreferrer">
+                <div class="thumbnail rounded">
+                  <img
+                    src="./assets/project1.png"
+                    class="img-fluid"
+                    alt="Project Image"
+                  />
+                </div>
+              </a>
+            </div>
+          </article>
+          <!-- /END Project -->
+          <!-- Each .row is a project -->
+          <article class="row">
+            <div class="project-wrapper__text">
+              <h3 class="project-wrapper__text-title">LightEmBold</h3>
+              <p class="project-wrapper__text-info">
+                Lightembold is the first Pakistan based organization aiming to integrate Learning, Gaming, Events, tournaments and many more ideas under a Single Name! --- LIGHTEMBOLD!!! <br>
+                I have Worked As A Backend Developer in LightEmBold. 
+              </p>
+              <div class="project-wrapper__text-btns">
+                <a
+                  href="https://lightembold.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="cta-btn cta-btn--hero cta-btn--projects"
+                  >See Live</a
+                >
+              </div>
+            </div>
+
+            <div class="project-wrapper__image">
+              <a href="https://lightembold.com/" target="_blank" rel="noopener noreferrer">
+                <div class="thumbnail rounded">
+                  <img
+                    src="./assets/lightembold.png"
+                    class="img-fluid"
+                    alt="Project Image"
+                  />
+                </div>
+              </a>
+            </div>
+          </article>
+          <!-- /END Project -->
+          <article class="row">
+            <div class="project-wrapper__text">
+              <h3 class="project-wrapper__text-title">DanDesigns</h3>
+              <p class="project-wrapper__text-info">
+                This is a Portfolio Website For My Graphics Designer Friend Known As <strong>DanDesigns</strong>.
+              </p>
+              <div class="project-wrapper__text-btns">
+                <a
+                  href="https://dandesigns.pro/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="cta-btn cta-btn--hero cta-btn--projects"
+                  >See Live</a
+                >
+              </div>
+            </div>
+
+            <div class="project-wrapper__image">
+              <a href="https://dandesigns.pro/" target="_blank" rel="noopener noreferrer">
+                <div class="thumbnail rounded">
+                  <img
+                    src="./assets/dandesigns.png"
+                    class="img-fluid"
+                    alt="Project Image"
+                  />
+                </div>
+              </a>
+            </div>
+          </article>
+                    <!-- /END Project -->
+                    <article class="row">
+                      <div class="project-wrapper__text">
+                        <h3 class="project-wrapper__text-title">CLB.Ninja</h3>
+                        <p class="project-wrapper__text-info">
+                          This is a blogging Page for a Brawl Stars Community Called <strong>CLB</strong>.
+                        </p>
+                        <div class="project-wrapper__text-btns">
+                          <a
+                            href="https://clb.ninja/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="cta-btn cta-btn--hero cta-btn--projects"
+                            >See Live</a
+                          >
+                        </div>
+                      </div>
+          
+                      <div class="project-wrapper__image">
+                        <a href="https://clb.ninja/" target="_blank" rel="noopener noreferrer">
+                          <div class="thumbnail rounded">
+                            <img
+                              src="./assets/clb.png"
+                              class="img-fluid"
+                              alt="Project Image"
+                            />
+                          </div>
+                        </a>
+                      </div>
+                    </article>
+                    <!-- /END Project -->
+                    <article class="row">
+                      <div class="project-wrapper__text">
+                        <h3 class="project-wrapper__text-title">PaisaWasool.Store</h3>
+                        <p class="project-wrapper__text-info">
+                          This is an Ecommerce Website Made by Me from Everyone and it is known As <strong>PaisaWasool</strong>.
+                        </p>
+                        <div class="project-wrapper__text-btns">
+                          <a
+                            href="https://paisawasool.store/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="cta-btn cta-btn--hero cta-btn--projects"
+                            >See Live</a
+                          >
+                        </div>
+                      </div>
+          
+                      <div class="project-wrapper__image">
+                        <a href="https://paisawasool.store/" target="_blank" rel="noopener noreferrer">
+                          <div class="thumbnail rounded">
+                            <img
+                              src="./assets/paisawasool.png"
+                              class="img-fluid"
+                              alt="Project Image"
+                            />
+                          </div>
+                        </a>
+                      </div>
+                    </article>
+                    <!-- end -->
+          <!-- Each .row is a project -->
+          <article class="row">
+            <div class="project-wrapper__text">
+              <h3 class="project-wrapper__text-title">Brawl stars status</h3>
+              <p class="project-wrapper__text-info">
+                This is a open source project I made for those who are new in programing and want to learn more. In this website you can check your or someone else's Brawl stars profile using brawl stars profile but unfortunately i haven't hosted it yet so you have to host it on your local pc to use. Click on source code button and get source code. Instructions are also written there.
+              </p>
+              <div class="project-wrapper__text-btns">
+                <a href="https://github.com/LRxDarkDevil/Brawl-stars-Stats-Website" target="_blank" class="cta-btn text-color-main"
+                  >Source Code</a
+                >
+              </div>
+            </div>
+
+            <div class="project-wrapper__image">
+              <a href="https://github.com/LRxDarkDevil/Brawl-stars-Stats-Website" target="_blank" rel="noopener noreferrer">
+                <div class="thumbnail rounded">
+                  <img
+                    src="./assets/project2.png"
+                    class="img-fluid"
+                    alt="Project Image"
+                  />
+                </div>
+              </a>
+            </div>
+          </article>
+          <!-- /END Project -->
+        </div>
+      </div>
+    </section>
+    <!-- End Projects Section -->
+
+    <!-- Contact Section -->
+    <section id="contact">
+      <div class="container">
+        <h2 class="section-title">Contact</h2>
+        <div class="contact-wrapper">
+          <p class="contact-wrapper__text"><i class="fa-brands fa-discord"></i> darkdare_devil</p>
+          <a href="mailto: tahaadnanawan@gmail.com" class="cta-btn cta-btn--resume">Email</a>
+        </div>
+      </div>
+    </section>
+    <!-- END Contact Section -->
+
+    <!-- Footer Section -->
+    <footer class="footer">
+      <div class="container">
+        <a href="#hero" class="back-to-top" aria-label="go back to top">
+          <i class="fa fa-angle-up fa-2x" aria-hidden="true"></i>
+        </a>
+        <div class="social-links">
+          <a
+            href="https://twitter.com/DarkDare_Devil"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="twitter"
+          >
+            <i class="fa fa-twitter"></i>
+          </a>
+          <a
+            href="https://github.com/LRxDarkDevil"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="github"
+          >
+            <i class="fa fa-github"></i>
+          </a>
+        </div>
+        <hr />
+        <!-- <p class="footer__text">
+          &copy; <span id="year"></span> - Template by
+          <a
+            href="https://github.com/AnilSeervi"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Anil Seervi</a
+          >. <br />Made with &hearts;
+        </p> -->
+      </div>
+    </footer>
+    <!-- END Footer Section -->
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+    <script src="./javascript/vanilla-tilt.min.js"></script>
+    <script type="text/javascript" src="./javascript/valtilt.js"></script>
+  </body>
+</html>
