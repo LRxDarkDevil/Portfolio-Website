@@ -15,8 +15,22 @@ body {
     font-size: 1.6rem;
     line-height: 1.6;
     color: #ffffff;
-    background-color: #0a0a0a;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
     overflow-x: hidden;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
 }
 
 /* ===== CUSTOM PROPERTIES ===== */
@@ -73,11 +87,13 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(10, 10, 10, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border-color);
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     z-index: 1000;
     transition: all 0.3s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .nav-container {
@@ -96,7 +112,7 @@ body {
 }
 
 .logo-text {
-    font-size: 2.4rem;
+    font-size: 1.8rem;
     font-weight: 700;
     background: var(--gradient-primary);
     -webkit-background-clip: text;
@@ -238,18 +254,21 @@ body {
     font-size: 1.6rem;
     font-weight: 600;
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: 12px;
     transition: all 0.3s ease;
     cursor: pointer;
     border: none;
     position: relative;
     overflow: hidden;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .btn-primary {
-    background: var(--gradient-primary);
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.9) 0%, rgba(99, 102, 241, 0.9) 100%);
     color: var(--text-primary);
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-primary:hover {
@@ -258,9 +277,12 @@ body {
 }
 
 .btn-secondary {
-    background: transparent;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     color: var(--text-primary);
-    border: 2px solid var(--accent-color);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .btn-secondary:hover {
@@ -277,12 +299,15 @@ body {
 
 .floating-card {
     position: absolute;
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
+    background: rgba(26, 26, 26, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
     padding: 1.6rem;
-    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     animation: float 6s ease-in-out infinite;
+    transition: all 0.3s ease;
 }
 
 .floating-card:nth-child(1) {
@@ -308,6 +333,12 @@ body {
     align-items: center;
     gap: 1rem;
     color: var(--text-primary);
+}
+
+.floating-card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border-color: rgba(0, 212, 255, 0.3);
 }
 
 .card-content i {
@@ -420,10 +451,13 @@ body {
     align-items: center;
     gap: 1rem;
     padding: 2rem;
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
+    background: rgba(26, 26, 26, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .skill-item:hover {
@@ -459,12 +493,14 @@ body {
 }
 
 .project-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
+    background: rgba(26, 26, 26, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
     overflow: hidden;
     transition: all 0.3s ease;
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .project-card:hover {
@@ -601,10 +637,13 @@ body {
     align-items: center;
     gap: 1.6rem;
     padding: 2rem;
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
+    background: rgba(26, 26, 26, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .contact-method:hover {
@@ -638,10 +677,13 @@ body {
 }
 
 .contact-form {
-    background: var(--card-bg);
+    background: rgba(26, 26, 26, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     padding: 3rem;
-    border-radius: 16px;
-    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .form-group {
@@ -652,9 +694,11 @@ body {
 .form-group textarea {
     width: 100%;
     padding: 1.2rem 1.6rem;
-    background: var(--primary-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
+    background: rgba(10, 10, 10, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
     color: var(--text-primary);
     font-size: 1.6rem;
     transition: all 0.3s ease;
@@ -701,12 +745,15 @@ body {
     justify-content: center;
     width: 40px;
     height: 40px;
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
+    background: rgba(26, 26, 26, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 50%;
     color: var(--text-secondary);
     text-decoration: none;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .social-link:hover {
@@ -761,6 +808,10 @@ body {
 
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
+    .logo-text {
+        font-size: 1.4rem;
+    }
+    
     .hamburger {
         display: flex;
     }
@@ -820,6 +871,10 @@ body {
 }
 
 @media (max-width: 480px) {
+    .logo-text {
+        font-size: 1.2rem;
+    }
+    
     .container {
         padding: 0 1.5rem;
     }

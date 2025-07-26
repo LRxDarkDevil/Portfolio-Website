@@ -1,0 +1,21 @@
+{
+    "name": "Taha Adnan - FullStack Developer",
+    "short_name": "Taha Adnan",
+    "description": "FullStack Developer specializing in TypeScript, React, Node.js, and modern web development",
+    "icons": [
+        {
+            "src": "./assets/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "./assets/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#00d4ff",
+    "background_color": "#0a0a0a",
+    "display": "standalone",
+    "start_url": "/"
+} 
