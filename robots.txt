@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://tahaadnan.dev/sitemap.xml
+Sitemap: https://tahaadnan.is-a.dev/sitemap.xml
 
 # Crawl-delay
 Crawl-delay: 1 
