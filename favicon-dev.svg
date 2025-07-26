@@ -1,0 +1,39 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Developer favicon with </> symbol -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="bracketGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="url(#bgGradient)"/>
+  
+  <!-- Code brackets </> -->
+  <g filter="url(#glow)">
+    <!-- Opening bracket < -->
+    <path d="M8 10l4 6-4 6h2l3-5-3-5h-2z" fill="url(#bracketGradient)"/>
+    
+    <!-- Forward slash / -->
+    <path d="M14 10l4 12h-2l-4-12h2z" fill="url(#bracketGradient)"/>
+    
+    <!-- Closing bracket > -->
+    <path d="M24 10l-4 6 4 6h-2l-3-5 3-5h2z" fill="url(#bracketGradient)"/>
+  </g>
+  
+  <!-- Subtle code lines in background -->
+  <rect x="6" y="26" width="20" height="1" fill="rgba(0,212,255,0.2)" rx="0.5"/>
+  <rect x="8" y="28" width="16" height="1" fill="rgba(99,102,241,0.2)" rx="0.5"/>
+</svg> 

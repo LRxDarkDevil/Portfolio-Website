@@ -1,0 +1,47 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Terminal window design -->
+  <defs>
+    <linearGradient id="windowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e1e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d2d30;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="titleBarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3c3c3c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d2d30;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Terminal window background -->
+  <rect x="2" y="2" width="28" height="28" rx="4" fill="url(#windowGradient)" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+  
+  <!-- Title bar -->
+  <rect x="3" y="3" width="26" height="6" rx="3" fill="url(#titleBarGradient)"/>
+  
+  <!-- Window controls -->
+  <circle cx="6" cy="6" r="1" fill="#ff5f56"/>
+  <circle cx="9" cy="6" r="1" fill="#ffbd2e"/>
+  <circle cx="12" cy="6" r="1" fill="#27ca3f"/>
+  
+  <!-- Code content -->
+  <g transform="translate(4, 12)">
+    <!-- Function keyword -->
+    <text x="0" y="0" font-family="monospace" font-size="6" fill="#569cd6">function</text>
+    
+    <!-- Function name -->
+    <text x="32" y="0" font-family="monospace" font-size="6" fill="#dcdcdc">dev</text>
+    
+    <!-- Opening brace -->
+    <text x="44" y="0" font-family="monospace" font-size="6" fill="#dcdcdc">()</text>
+    
+    <!-- Return statement -->
+    <text x="0" y="8" font-family="monospace" font-size="6" fill="#ce9178">return</text>
+    <text x="24" y="8" font-family="monospace" font-size="6" fill="#dcdcdc">"</text>
+    <text x="30" y="8" font-family="monospace" font-size="6" fill="#ce9178">awesome</text>
+    <text x="58" y="8" font-family="monospace" font-size="6" fill="#dcdcdc">"</text>
+  </g>
+  
+  <!-- Cursor blink animation -->
+  <rect x="30" y="18" width="1" height="6" fill="#00d4ff" opacity="0.8">
+    <animate attributeName="opacity" values="0.8;0;0.8" dur="1s" repeatCount="indefinite"/>
+  </rect>
+</svg> 
