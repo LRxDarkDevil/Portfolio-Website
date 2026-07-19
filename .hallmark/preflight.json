@@ -1,0 +1,10 @@
+{
+  "date": "2026-07-19",
+  "font_stack": "Inter via Google Fonts",
+  "palette": "hex custom properties, cyan and indigo on near-black",
+  "motion": "custom vanilla JavaScript; particles, parallax, scroll reveals",
+  "spacing": "mixed pixel and rem values; no named token scale",
+  "framework": "vanilla HTML, CSS, and JavaScript",
+  "preserve": ["static GitHub Pages architecture", "existing route", "project assets"],
+  "introduce": ["custom OKLCH tokens", "Portfolio Grid macrostructure", "restrained motion", "mobile gates"]
+}
