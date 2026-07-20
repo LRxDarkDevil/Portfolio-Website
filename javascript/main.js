@@ -117,25 +117,42 @@ if (currentYear) {
     currentYear.textContent = new Date().getFullYear();
 }
 
-function loadProjectReelEnhancement() {
+function loadProjectReelStylesheet() {
+    const stylesheetUrl = new URL("./css/project-reel.css", document.baseURI);
+    const existing = [...document.querySelectorAll('link[rel="stylesheet"]')]
+        .find((link) => link.href === stylesheetUrl.href);
+
+    if (existing?.sheet) {
+        return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+        const stylesheet = existing || document.createElement("link");
+
+        stylesheet.addEventListener("load", resolve, { once: true });
+        stylesheet.addEventListener("error", () => reject(new Error("Project reel stylesheet failed to load.")), { once: true });
+
+        if (!existing) {
+            stylesheet.rel = "stylesheet";
+            stylesheet.href = stylesheetUrl.href;
+            document.head.append(stylesheet);
+        }
+    });
+}
+
+async function loadProjectReelEnhancement() {
     if (!document.querySelector("#projects")) {
         return;
     }
 
-    const stylesheetUrl = new URL("./css/project-reel.css", document.baseURI);
-    if (!document.querySelector(`link[href="${stylesheetUrl.href}"]`)) {
-        const stylesheet = document.createElement("link");
-        stylesheet.rel = "stylesheet";
-        stylesheet.href = stylesheetUrl.href;
-        document.head.append(stylesheet);
+    try {
+        await loadProjectReelStylesheet();
+        const moduleUrl = new URL("./javascript/project-reel.js", document.baseURI);
+        const { setupProjectReel } = await import(moduleUrl.href);
+        setupProjectReel();
+    } catch (error) {
+        console.warn("Project reel enhancement could not be loaded; the project grid remains available.", error);
     }
-
-    const moduleUrl = new URL("./javascript/project-reel.js", document.baseURI);
-    import(moduleUrl.href)
-        .then(({ setupProjectReel }) => setupProjectReel())
-        .catch((error) => {
-            console.warn("Project reel enhancement could not be loaded; the project grid remains available.", error);
-        });
 }
 
 loadProjectReelEnhancement();
