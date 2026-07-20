@@ -1,10 +1,31 @@
 export function installMechanicalMotion(MechanicalProjectReel, { clamp, subtleBackEase, shapeDetent }) {
   Object.assign(MechanicalProjectReel.prototype, {
+  applyResponsiveLayout() {
+    const compact = this.compactQuery.matches;
+
+    if (compact) {
+      this.sticky.style.minHeight = "calc(100svh - max(var(--space-xs), env(safe-area-inset-top)))";
+      this.sticky.style.gridTemplateRows = "auto minmax(0, 1fr)";
+      this.stage.style.minHeight = "0";
+      this.stage.style.gridTemplateRows = "minmax(0, 1fr) auto";
+      this.machine.style.height = "100%";
+      this.machine.style.minHeight = "27rem";
+      return;
+    }
+
+    this.sticky.style.removeProperty("min-height");
+    this.sticky.style.removeProperty("grid-template-rows");
+    this.stage.style.removeProperty("min-height");
+    this.stage.style.removeProperty("grid-template-rows");
+    this.machine.style.removeProperty("height");
+    this.machine.style.removeProperty("min-height");
+  },
+
   handleResize() {
     window.clearTimeout(this.resizeTimer);
     this.resizeTimer = window.setTimeout(() => {
       if (this.mediaQuery.matches) {
-        this.measure({ preservePosition: true });
+        this.measure({ preservePosition: true, position: this.rawPosition });
         this.handleScroll();
       }
     }, 120);
@@ -156,6 +177,10 @@ export function installMechanicalMotion(MechanicalProjectReel, { clamp, subtleBa
       : clamp(drumHeight * 0.82, 300, 520);
     const angleStep = compact ? 48 : 52;
 
+    const nearestDetent = Math.round(displayPosition);
+    const detentDistance = Math.abs(displayPosition - nearestDetent);
+    const neighborReveal = clamp((detentDistance - 0.025) / 0.225, 0, 1);
+
     this.visibleCards.forEach((card, index) => {
       const delta = index - displayPosition;
       const angle = clamp(delta * angleStep, -84, 84);
@@ -163,7 +188,8 @@ export function installMechanicalMotion(MechanicalProjectReel, { clamp, subtleBa
       const y = Math.sin(radians) * radius;
       const z = (Math.cos(radians) - 1) * radius;
       const distance = Math.abs(delta);
-      const opacity = clamp(1 - distance * (compact ? 0.8 : 0.72), 0, 1);
+      const baseOpacity = clamp(1 - distance * (compact ? 0.8 : 0.72), 0, 1);
+      const opacity = index === nearestDetent ? baseOpacity : baseOpacity * neighborReveal;
       const scale = 1 - Math.min(distance * (compact ? 0.045 : 0.05), 0.1);
 
       card.style.setProperty("--reel-y", `${y.toFixed(2)}px`);
@@ -238,4 +264,10 @@ export function installMechanicalMotion(MechanicalProjectReel, { clamp, subtleBa
     }
   }
   });
+
+  const measure = MechanicalProjectReel.prototype.measure;
+  MechanicalProjectReel.prototype.measure = function measureWithResponsiveLayout(options) {
+    this.applyResponsiveLayout();
+    return measure.call(this, options);
+  };
 }
