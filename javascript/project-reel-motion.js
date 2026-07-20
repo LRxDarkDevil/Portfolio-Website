@@ -149,18 +149,22 @@ export function installMechanicalMotion(MechanicalProjectReel, { clamp, subtleBa
     }
 
     const displayPosition = shapeDetent(clamp(this.physicalPosition, 0, Math.max(0, this.visibleCards.length - 1)));
-    const stageHeight = this.stage?.clientHeight || window.innerHeight * 0.72;
-    const radius = clamp(stageHeight * 0.72, 360, 610);
+    const compact = this.compactQuery.matches;
+    const drumHeight = this.drumWindow?.clientHeight || window.innerHeight * 0.62;
+    const radius = compact
+      ? clamp(drumHeight * 0.78, 230, 390)
+      : clamp(drumHeight * 0.82, 300, 520);
+    const angleStep = compact ? 48 : 52;
 
     this.visibleCards.forEach((card, index) => {
       const delta = index - displayPosition;
-      const angle = clamp(delta * 54, -86, 86);
+      const angle = clamp(delta * angleStep, -84, 84);
       const radians = angle * (Math.PI / 180);
       const y = Math.sin(radians) * radius;
       const z = (Math.cos(radians) - 1) * radius;
       const distance = Math.abs(delta);
-      const opacity = clamp(1 - distance * 0.64, 0, 1);
-      const scale = 1 - Math.min(distance * 0.055, 0.12);
+      const opacity = clamp(1 - distance * (compact ? 0.8 : 0.72), 0, 1);
+      const scale = 1 - Math.min(distance * (compact ? 0.045 : 0.05), 0.1);
 
       card.style.setProperty("--reel-y", `${y.toFixed(2)}px`);
       card.style.setProperty("--reel-z", `${z.toFixed(2)}px`);
