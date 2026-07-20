@@ -103,7 +103,7 @@ class MechanicalProjectReel {
       this.mutationObserver.observe(card, { attributes: true, attributeFilter: ["hidden"] });
     });
 
-    this.shell.addEventListener("scroll", this.handleScroll, { passive: true });
+    window.addEventListener("scroll", this.handleScroll, { passive: true });
     this.shell.addEventListener("pointerdown", this.handlePointerDown, { passive: true });
     this.shell.addEventListener("pointerup", this.handlePointerUp, { passive: true });
     this.shell.addEventListener("pointercancel", this.handlePointerUp, { passive: true });
@@ -130,7 +130,7 @@ class MechanicalProjectReel {
     }
 
     this.mutationObserver?.disconnect();
-    this.shell?.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener("scroll", this.handleScroll);
     this.shell?.removeEventListener("pointerdown", this.handlePointerDown);
     this.shell?.removeEventListener("pointerup", this.handlePointerUp);
     this.shell?.removeEventListener("pointercancel", this.handlePointerUp);
@@ -178,22 +178,11 @@ class MechanicalProjectReel {
     this.scrollChamberStyle = document.createElement("style");
     this.scrollChamberStyle.dataset.projectReelScrollChamber = "";
     this.scrollChamberStyle.textContent = `
-      .project-reel-enabled { padding-block-end: var(--space-4xl); }
+      .project-reel-enabled { padding-block-end: 0; }
       [data-project-reel] {
         isolation: isolate;
-        overflow-x: hidden;
-        overflow-y: auto;
-        overscroll-behavior-y: auto;
-        scrollbar-width: none;
-        touch-action: pan-y;
-        contain: layout paint;
-      }
-      [data-project-reel]::-webkit-scrollbar { display: none; }
-      [data-project-reel] > .project-reel__sticky { inset-block-start: 0; }
-      [data-project-reel] > .project-reel__track {
-        width: 1px;
-        min-height: 0;
-        pointer-events: none;
+        position: relative;
+        width: 100%;
       }
     `;
     document.head.append(this.scrollChamberStyle);
@@ -262,13 +251,9 @@ class MechanicalProjectReel {
     this.liveRegion.setAttribute("aria-live", "polite");
     this.liveRegion.setAttribute("aria-atomic", "true");
 
-    this.track = document.createElement("div");
-    this.track.className = "project-reel__track";
-    this.track.setAttribute("aria-hidden", "true");
-
     this.stage.append(this.machine, this.indexRail);
     this.sticky.append(toolbar, this.stage, this.liveRegion);
-    this.shell.append(this.sticky, this.track);
+    this.shell.append(this.sticky);
     this.grid.parentNode?.insertBefore(this.shell, this.grid);
     this.drumWindow.append(this.grid);
 
@@ -351,7 +336,7 @@ class MechanicalProjectReel {
   }
 
   measure({ preservePosition = true, forceAlign = false, position = this.activeIndex } = {}) {
-    if (!this.enabled || !this.shell || !this.track) {
+    if (!this.enabled || !this.shell) {
       return;
     }
 
@@ -363,98 +348,23 @@ class MechanicalProjectReel {
       ? clamp(window.innerHeight * 0.54, 300, 480)
       : clamp(window.innerHeight * 0.62, 380, 640);
     this.maxScroll = this.stepHeight * Math.max(0, this.visibleCards.length - 1);
-    this.shell.style.height = `${stickyHeight}px`;
-    this.track.style.height = `${this.maxScroll}px`;
+    this.shell.style.height = `${stickyHeight + this.maxScroll}px`;
     this.shell.style.setProperty("--project-count", String(this.visibleCards.length));
 
+    const stickyStyle = window.getComputedStyle(this.sticky);
+    const stickyTopOffset = parseFloat(stickyStyle.top) || 0;
+    const shellRect = this.shell.getBoundingClientRect();
+    this.reelTop = shellRect.top + window.scrollY - stickyTopOffset;
+
     if (preservedPosition !== null && (forceAlign || this.enabled)) {
-      this.shell.scrollTo({ top: preservedPosition * this.stepHeight, behavior: "auto" });
+      const targetY = this.reelTop + preservedPosition * this.stepHeight;
+      window.scrollTo({ top: targetY, behavior: "auto" });
     }
   }
 
 }
 
 installMechanicalMotion(MechanicalProjectReel, { clamp, subtleBackEase, shapeDetent });
-
-Object.assign(MechanicalProjectReel.prototype, {
-  handleScroll() {
-    if (!this.enabled || this.visibleCards.length === 0) {
-      return;
-    }
-
-    const nextPosition = clamp(this.shell.scrollTop / Math.max(1, this.stepHeight), 0, this.visibleCards.length - 1);
-    const delta = nextPosition - this.lastRawPosition;
-
-    if (Math.abs(delta) > 0.001) {
-      this.scrollDirection = delta > 0 ? 1 : -1;
-    }
-
-    this.rawPosition = nextPosition;
-    this.lastRawPosition = nextPosition;
-    this.requestRender();
-
-    if (!this.isSettling) {
-      this.scheduleSettle(260);
-    }
-  },
-
-  isInsideReel() {
-    return this.enabled && this.shell?.isConnected;
-  },
-
-  settleToIndex(index) {
-    const targetIndex = clamp(index, 0, Math.max(0, this.visibleCards.length - 1));
-    const targetY = targetIndex * this.stepHeight;
-    const startY = this.shell.scrollTop;
-    const distance = targetY - startY;
-
-    if (Math.abs(distance) < 1) {
-      this.rawPosition = targetIndex;
-      this.lastRawPosition = targetIndex;
-      this.updateActiveProject(targetIndex);
-      this.requestRender();
-      return;
-    }
-
-    this.cancelSettle();
-    this.isSettling = true;
-
-    const duration = clamp(420 + Math.abs(distance) * 0.2, 460, 760);
-    const startTime = performance.now();
-
-    const step = (time) => {
-      const elapsed = time - startTime;
-      const progress = clamp(elapsed / duration, 0, 1);
-      const eased = subtleBackEase(progress);
-      this.shell.scrollTop = startY + distance * eased;
-
-      if (progress < 1) {
-        this.settleFrameId = window.requestAnimationFrame(step);
-        return;
-      }
-
-      this.shell.scrollTop = targetY;
-      this.rawPosition = targetIndex;
-      this.lastRawPosition = targetIndex;
-      this.isSettling = false;
-      this.settleFrameId = null;
-      this.updateActiveProject(targetIndex);
-      this.requestRender();
-    };
-
-    this.settleFrameId = window.requestAnimationFrame(step);
-  },
-
-  cancelSettle() {
-    if (this.settleFrameId) {
-      window.cancelAnimationFrame(this.settleFrameId);
-      this.settleFrameId = null;
-    }
-
-    this.isSettling = false;
-    document.documentElement.classList.remove("project-reel-programmatic-scroll");
-  }
-});
 
 export function setupProjectReel() {
   const section = document.querySelector("#projects");

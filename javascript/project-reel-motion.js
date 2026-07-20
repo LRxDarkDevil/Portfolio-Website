@@ -46,7 +46,15 @@ export function installMechanicalMotion(MechanicalProjectReel, { clamp, subtleBa
       return;
     }
 
-    const nextPosition = clamp((window.scrollY - this.reelTop) / Math.max(1, this.stepHeight), 0, this.visibleCards.length - 1);
+    const currentY = window.scrollY;
+
+    if (this.isSettling && !this.isPointerDown && this.expectedScrollY !== undefined) {
+      if (Math.abs(currentY - this.expectedScrollY) > 18) {
+        this.cancelSettle();
+      }
+    }
+
+    const nextPosition = clamp((currentY - this.reelTop) / Math.max(1, this.stepHeight), 0, this.visibleCards.length - 1);
     const delta = nextPosition - this.lastRawPosition;
 
     if (Math.abs(delta) > 0.001) {
@@ -63,11 +71,20 @@ export function installMechanicalMotion(MechanicalProjectReel, { clamp, subtleBa
   },
 
   isInsideReel() {
-    return window.scrollY >= this.reelTop - 2 && window.scrollY <= this.reelTop + this.maxScroll + 2;
+    if (!this.enabled || !this.visibleCards.length) return false;
+    const scrollY = window.scrollY;
+    return scrollY > this.reelTop + 5 && scrollY < this.reelTop + this.maxScroll - 5;
   },
 
   scheduleSettle(delay = 260) {
     if (this.isSettling || this.isPointerDown || !this.isInsideReel()) {
+      return;
+    }
+
+    if (this.rawPosition <= 0.02 && this.scrollDirection <= 0) {
+      return;
+    }
+    if (this.rawPosition >= this.visibleCards.length - 1.02 && this.scrollDirection >= 0) {
       return;
     }
 
@@ -76,7 +93,14 @@ export function installMechanicalMotion(MechanicalProjectReel, { clamp, subtleBa
   },
 
   settleFromCurrentPosition() {
-    if (this.isSettling || this.isPointerDown || this.visibleCards.length < 2) {
+    if (this.isSettling || this.isPointerDown || this.visibleCards.length < 2 || !this.isInsideReel()) {
+      return;
+    }
+
+    if (this.rawPosition <= 0.02 && this.scrollDirection <= 0) {
+      return;
+    }
+    if (this.rawPosition >= this.visibleCards.length - 1.02 && this.scrollDirection >= 0) {
       return;
     }
 
@@ -110,26 +134,34 @@ export function installMechanicalMotion(MechanicalProjectReel, { clamp, subtleBa
 
     this.cancelSettle();
     this.isSettling = true;
+    this.expectedScrollY = startY;
     document.documentElement.classList.add("project-reel-programmatic-scroll");
 
     const duration = clamp(460 + Math.abs(distance) * 0.22, 500, 820);
     const startTime = performance.now();
 
     const step = (time) => {
+      if (!this.isSettling) return;
+
       const elapsed = time - startTime;
       const progress = clamp(elapsed / duration, 0, 1);
       const eased = subtleBackEase(progress);
-      window.scrollTo(0, startY + distance * eased);
+      const nextY = startY + distance * eased;
+
+      this.expectedScrollY = nextY;
+      window.scrollTo(0, nextY);
 
       if (progress < 1) {
         this.settleFrameId = window.requestAnimationFrame(step);
         return;
       }
 
+      this.expectedScrollY = targetY;
       window.scrollTo(0, targetY);
       this.rawPosition = targetIndex;
       this.lastRawPosition = targetIndex;
       this.isSettling = false;
+      this.expectedScrollY = undefined;
       this.settleFrameId = null;
       document.documentElement.classList.remove("project-reel-programmatic-scroll");
       this.updateActiveProject(targetIndex);
@@ -146,6 +178,7 @@ export function installMechanicalMotion(MechanicalProjectReel, { clamp, subtleBa
     }
 
     this.isSettling = false;
+    this.expectedScrollY = undefined;
     document.documentElement.classList.remove("project-reel-programmatic-scroll");
   },
 
