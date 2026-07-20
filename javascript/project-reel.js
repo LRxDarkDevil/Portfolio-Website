@@ -25,7 +25,8 @@ class MechanicalProjectReel {
     this.grid = section.querySelector("#project-grid");
     this.cards = [...section.querySelectorAll(".project-card[data-category]")];
     this.filterButtons = [...section.querySelectorAll("[data-filter]")];
-    this.mediaQuery = window.matchMedia("(min-width: 60rem) and (prefers-reduced-motion: no-preference)");
+    this.mediaQuery = window.matchMedia("(prefers-reduced-motion: no-preference)");
+    this.compactQuery = window.matchMedia("(max-width: 47.999rem)");
 
     this.enabled = false;
     this.visibleCards = [];
@@ -325,11 +326,18 @@ class MechanicalProjectReel {
     }
 
     const preservedIndex = preservePosition ? this.activeIndex : null;
-    this.stepHeight = clamp(window.innerHeight * 0.82, 520, 900);
+    const compact = this.compactQuery.matches;
+    const stickyStyle = window.getComputedStyle(this.sticky);
+    const stickyOffset = Number.parseFloat(stickyStyle.insetBlockStart || stickyStyle.top) || 0;
+    const stickyHeight = Math.ceil(this.sticky.getBoundingClientRect().height);
+
+    this.stepHeight = compact
+      ? clamp(window.innerHeight * 0.64, 340, 590)
+      : clamp(window.innerHeight * 0.72, 460, 760);
     this.maxScroll = this.stepHeight * Math.max(0, this.visibleCards.length - 1);
-    this.shell.style.height = `${window.innerHeight + this.maxScroll}px`;
+    this.shell.style.height = `${stickyHeight + this.maxScroll}px`;
     this.shell.style.setProperty("--project-count", String(this.visibleCards.length));
-    this.reelTop = this.shell.getBoundingClientRect().top + window.scrollY;
+    this.reelTop = this.shell.getBoundingClientRect().top + window.scrollY - stickyOffset;
 
     if (preservedIndex !== null && (forceAlign || this.isInsideReel())) {
       window.scrollTo({ top: this.reelTop + preservedIndex * this.stepHeight, behavior: "auto" });
