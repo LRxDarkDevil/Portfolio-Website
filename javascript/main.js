@@ -116,3 +116,26 @@ const currentYear = document.querySelector("#current-year");
 if (currentYear) {
     currentYear.textContent = new Date().getFullYear();
 }
+
+function loadProjectReelEnhancement() {
+    if (!document.querySelector("#projects")) {
+        return;
+    }
+
+    const stylesheetUrl = new URL("./css/project-reel.css", document.baseURI);
+    if (!document.querySelector(`link[href="${stylesheetUrl.href}"]`)) {
+        const stylesheet = document.createElement("link");
+        stylesheet.rel = "stylesheet";
+        stylesheet.href = stylesheetUrl.href;
+        document.head.append(stylesheet);
+    }
+
+    const moduleUrl = new URL("./javascript/project-reel.js", document.baseURI);
+    import(moduleUrl.href)
+        .then(({ setupProjectReel }) => setupProjectReel())
+        .catch((error) => {
+            console.warn("Project reel enhancement could not be loaded; the project grid remains available.", error);
+        });
+}
+
+loadProjectReelEnhancement();
