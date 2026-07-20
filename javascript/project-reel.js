@@ -103,12 +103,12 @@ class MechanicalProjectReel {
       this.mutationObserver.observe(card, { attributes: true, attributeFilter: ["hidden"] });
     });
 
-    window.addEventListener("scroll", this.handleScroll, { passive: true });
+    this.shell.addEventListener("scroll", this.handleScroll, { passive: true });
+    this.shell.addEventListener("pointerdown", this.handlePointerDown, { passive: true });
+    this.shell.addEventListener("pointerup", this.handlePointerUp, { passive: true });
+    this.shell.addEventListener("pointercancel", this.handlePointerUp, { passive: true });
+    this.shell.addEventListener("touchend", this.handlePointerUp, { passive: true });
     window.addEventListener("resize", this.handleResize, { passive: true });
-    window.addEventListener("pointerdown", this.handlePointerDown, { passive: true });
-    window.addEventListener("pointerup", this.handlePointerUp, { passive: true });
-    window.addEventListener("pointercancel", this.handlePointerUp, { passive: true });
-    window.addEventListener("touchend", this.handlePointerUp, { passive: true });
 
     this.measure({ preservePosition: false });
     this.handleScroll();
@@ -130,12 +130,12 @@ class MechanicalProjectReel {
     }
 
     this.mutationObserver?.disconnect();
-    window.removeEventListener("scroll", this.handleScroll);
+    this.shell?.removeEventListener("scroll", this.handleScroll);
+    this.shell?.removeEventListener("pointerdown", this.handlePointerDown);
+    this.shell?.removeEventListener("pointerup", this.handlePointerUp);
+    this.shell?.removeEventListener("pointercancel", this.handlePointerUp);
+    this.shell?.removeEventListener("touchend", this.handlePointerUp);
     window.removeEventListener("resize", this.handleResize);
-    window.removeEventListener("pointerdown", this.handlePointerDown);
-    window.removeEventListener("pointerup", this.handlePointerUp);
-    window.removeEventListener("pointercancel", this.handlePointerUp);
-    window.removeEventListener("touchend", this.handlePointerUp);
 
     this.cards.forEach((card) => {
       card.removeAttribute("aria-current");
@@ -171,6 +171,8 @@ class MechanicalProjectReel {
     this.shell = document.createElement("div");
     this.shell.className = "project-reel";
     this.shell.dataset.projectReel = "";
+    this.shell.tabIndex = 0;
+    this.shell.setAttribute("aria-label", "Scrollable mechanical project archive");
 
     this.sticky = document.createElement("div");
     this.sticky.className = "project-reel__sticky";
@@ -236,9 +238,13 @@ class MechanicalProjectReel {
     this.liveRegion.setAttribute("aria-live", "polite");
     this.liveRegion.setAttribute("aria-atomic", "true");
 
+    this.track = document.createElement("div");
+    this.track.className = "project-reel__track";
+    this.track.setAttribute("aria-hidden", "true");
+
     this.stage.append(this.machine, this.indexRail);
     this.sticky.append(toolbar, this.stage, this.liveRegion);
-    this.shell.append(this.sticky);
+    this.shell.append(this.sticky, this.track);
     this.grid.parentNode?.insertBefore(this.shell, this.grid);
     this.drumWindow.append(this.grid);
 
@@ -320,27 +326,25 @@ class MechanicalProjectReel {
     this.indexButtons = [...this.indexRail.querySelectorAll("button")];
   }
 
-  measure({ preservePosition = true, forceAlign = false } = {}) {
-    if (!this.enabled || !this.shell) {
+  measure({ preservePosition = true, forceAlign = false, position = this.activeIndex } = {}) {
+    if (!this.enabled || !this.shell || !this.track) {
       return;
     }
 
-    const preservedIndex = preservePosition ? this.activeIndex : null;
+    const preservedPosition = preservePosition ? position : null;
     const compact = this.compactQuery.matches;
-    const stickyStyle = window.getComputedStyle(this.sticky);
-    const stickyOffset = Number.parseFloat(stickyStyle.insetBlockStart || stickyStyle.top) || 0;
     const stickyHeight = Math.ceil(this.sticky.getBoundingClientRect().height);
 
     this.stepHeight = compact
-      ? clamp(window.innerHeight * 0.64, 340, 590)
-      : clamp(window.innerHeight * 0.72, 460, 760);
+      ? clamp(window.innerHeight * 0.54, 300, 480)
+      : clamp(window.innerHeight * 0.62, 380, 640);
     this.maxScroll = this.stepHeight * Math.max(0, this.visibleCards.length - 1);
-    this.shell.style.height = `${stickyHeight + this.maxScroll}px`;
+    this.shell.style.height = `${stickyHeight}px`;
+    this.track.style.height = `${this.maxScroll}px`;
     this.shell.style.setProperty("--project-count", String(this.visibleCards.length));
-    this.reelTop = this.shell.getBoundingClientRect().top + window.scrollY - stickyOffset;
 
-    if (preservedIndex !== null && (forceAlign || this.isInsideReel())) {
-      window.scrollTo({ top: this.reelTop + preservedIndex * this.stepHeight, behavior: "auto" });
+    if (preservedPosition !== null && (forceAlign || this.enabled)) {
+      this.shell.scrollTo({ top: preservedPosition * this.stepHeight, behavior: "auto" });
     }
   }
 
