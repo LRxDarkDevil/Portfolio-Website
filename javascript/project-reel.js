@@ -163,6 +163,7 @@ class MechanicalProjectReel {
     }
 
     this.shell?.remove();
+    this.scrollChamberStyle?.remove();
     this.section.classList.remove("project-reel-enabled");
     document.documentElement.classList.remove("project-reel-supported", "project-reel-programmatic-scroll");
   }
@@ -173,6 +174,29 @@ class MechanicalProjectReel {
     this.shell.dataset.projectReel = "";
     this.shell.tabIndex = 0;
     this.shell.setAttribute("aria-label", "Scrollable mechanical project archive");
+
+    this.scrollChamberStyle = document.createElement("style");
+    this.scrollChamberStyle.dataset.projectReelScrollChamber = "";
+    this.scrollChamberStyle.textContent = `
+      .project-reel-enabled { padding-block-end: var(--space-4xl); }
+      [data-project-reel] {
+        isolation: isolate;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior-y: auto;
+        scrollbar-width: none;
+        touch-action: pan-y;
+        contain: layout paint;
+      }
+      [data-project-reel]::-webkit-scrollbar { display: none; }
+      [data-project-reel] > .project-reel__sticky { inset-block-start: 0; }
+      [data-project-reel] > .project-reel__track {
+        width: 1px;
+        min-height: 0;
+        pointer-events: none;
+      }
+    `;
+    document.head.append(this.scrollChamberStyle);
 
     this.sticky = document.createElement("div");
     this.sticky.className = "project-reel__sticky";
@@ -352,6 +376,85 @@ class MechanicalProjectReel {
 
 installMechanicalMotion(MechanicalProjectReel, { clamp, subtleBackEase, shapeDetent });
 
+Object.assign(MechanicalProjectReel.prototype, {
+  handleScroll() {
+    if (!this.enabled || this.visibleCards.length === 0) {
+      return;
+    }
+
+    const nextPosition = clamp(this.shell.scrollTop / Math.max(1, this.stepHeight), 0, this.visibleCards.length - 1);
+    const delta = nextPosition - this.lastRawPosition;
+
+    if (Math.abs(delta) > 0.001) {
+      this.scrollDirection = delta > 0 ? 1 : -1;
+    }
+
+    this.rawPosition = nextPosition;
+    this.lastRawPosition = nextPosition;
+    this.requestRender();
+
+    if (!this.isSettling) {
+      this.scheduleSettle(260);
+    }
+  },
+
+  isInsideReel() {
+    return this.enabled && this.shell?.isConnected;
+  },
+
+  settleToIndex(index) {
+    const targetIndex = clamp(index, 0, Math.max(0, this.visibleCards.length - 1));
+    const targetY = targetIndex * this.stepHeight;
+    const startY = this.shell.scrollTop;
+    const distance = targetY - startY;
+
+    if (Math.abs(distance) < 1) {
+      this.rawPosition = targetIndex;
+      this.lastRawPosition = targetIndex;
+      this.updateActiveProject(targetIndex);
+      this.requestRender();
+      return;
+    }
+
+    this.cancelSettle();
+    this.isSettling = true;
+
+    const duration = clamp(420 + Math.abs(distance) * 0.2, 460, 760);
+    const startTime = performance.now();
+
+    const step = (time) => {
+      const elapsed = time - startTime;
+      const progress = clamp(elapsed / duration, 0, 1);
+      const eased = subtleBackEase(progress);
+      this.shell.scrollTop = startY + distance * eased;
+
+      if (progress < 1) {
+        this.settleFrameId = window.requestAnimationFrame(step);
+        return;
+      }
+
+      this.shell.scrollTop = targetY;
+      this.rawPosition = targetIndex;
+      this.lastRawPosition = targetIndex;
+      this.isSettling = false;
+      this.settleFrameId = null;
+      this.updateActiveProject(targetIndex);
+      this.requestRender();
+    };
+
+    this.settleFrameId = window.requestAnimationFrame(step);
+  },
+
+  cancelSettle() {
+    if (this.settleFrameId) {
+      window.cancelAnimationFrame(this.settleFrameId);
+      this.settleFrameId = null;
+    }
+
+    this.isSettling = false;
+    document.documentElement.classList.remove("project-reel-programmatic-scroll");
+  }
+});
 
 export function setupProjectReel() {
   const section = document.querySelector("#projects");
